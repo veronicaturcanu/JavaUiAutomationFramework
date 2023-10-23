@@ -15,7 +15,7 @@ public class TestRunner {
         //new Window Code
         driver.switchTo().newWindow(WindowType.TAB);
         driver.get("https://andreisecuqa.host/");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         System.out.println("The current URL is " + driver.getCurrentUrl());
 
         WebElement myAccountIcon = driver.findElement(By.xpath("//i[@class='fa-solid fa-user']"));
@@ -47,15 +47,22 @@ public class TestRunner {
         System.out.println("The generated password is: " + password);
         passwordElement.sendKeys(password);
 
-        WebElement subscribeNewsletterElement = driver.findElement(By.xpath("//input[@id='input-newsletter']"));
-        subscribeNewsletterElement.click();
-
-        WebElement privacyPolicyElement = driver.findElement(By.cssSelector("input[value='1'][name='agree']"));
-        privacyPolicyElement.click();  // xpath: //input[@name='agree']  cssSelector: input[value='1'][name='agree']
-
-        Thread.sleep(1000); //pentru a reusi sa vizualizez datele inserate
+        //Thread.sleep(5000);
 
         WebElement continueBtnElement = driver.findElement(By.xpath("//button[@type='submit']"));
+        JavascriptExecutor je = (JavascriptExecutor) driver;
+        je.executeScript("arguments[0].scrollIntoView(true);", continueBtnElement);
+
+
+        WebElement subscribeNewsletterElement = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/div[1]/div[1]/form[1]/fieldset[3]/div[1]/div[1]/div[1]/input[2]"));
+        subscribeNewsletterElement.click();
+
+        WebElement privacyPolicyElement = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[1]/input[1]"));
+        privacyPolicyElement.click();  // xpath: //input[@name='agree']  cssSelector: input[value='1'][name='agree']
+
+        Thread.sleep(500); //pentru a reusi sa vizualizez datele inserate
+
+
         continueBtnElement.click();
 
         System.out.println(driver.getTitle());
