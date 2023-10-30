@@ -44,7 +44,7 @@ public class TestRunnerWithPageObjects {
         loginPage.clickTheLoginBtn();
         Thread.sleep(500);
 
-        DriverManager.getInstance().tearDown();
+        DriverManager.getInstance().quitTheDriver();
 
         System.out.println("The execution is over.");
     }
