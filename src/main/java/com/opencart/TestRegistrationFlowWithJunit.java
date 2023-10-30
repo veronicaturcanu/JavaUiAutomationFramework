@@ -158,7 +158,7 @@ public class TestRegistrationFlowWithJunit {
 
     @AfterEach
     public void afterEachTestCase(){
-        DriverManager.getInstance().quiteTheDriver();
+        DriverManager.getInstance().quitTheDriver();
         System.out.println("After each");
     }
 
