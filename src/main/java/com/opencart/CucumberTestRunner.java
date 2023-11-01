@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/main/java/com/opencart/features",
         glue = "com.opencart.stepdefinitions",
+        plugin = {"pretty", "html:target/cucumber-reports"}, //"usage", - timpul utilizat la rulare
+        monochrome = true,
         tags = ""
 )
 
