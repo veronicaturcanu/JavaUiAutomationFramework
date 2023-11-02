@@ -11,22 +11,22 @@ public class RegisterPage extends Page {
         super(driver);
     }
 
-    @FindBy(xpath = "//input[@id='input-firstname']")
+    @FindBy(id = "input-firstname")
     private WebElement firstNameInput;
 
-    @FindBy(xpath = "//input[@id='input-lastname']")
+    @FindBy(id = "input-lastname")
     private WebElement lastNameInput;
 
-    @FindBy(xpath = "//input[@id='input-email']")
+    @FindBy(id = "input-email")
     private WebElement emailInput;
 
-    @FindBy(xpath = "//input[@id='input-password']")
+    @FindBy(id = "input-password")
     private WebElement passwordInput;
 
-    @FindBy(xpath = "//input[@name='agree']")
+    @FindBy(css = "input[value='1'][name='agree']")
     private WebElement privacyToggle;
 
-    @FindBy(xpath = "//button[@type='submit']")
+    @FindBy(css = "button[type='submit']")
     private WebElement continueBtn;
 
     public void fillInTheRegisterForm(String firstName, String lastName, String email, String password, boolean toggle){
