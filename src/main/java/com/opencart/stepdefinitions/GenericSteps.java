@@ -1,13 +1,13 @@
 package com.opencart.stepdefinitions;
 
-import com.opencart.managers.ConfigReaderManager;
-import com.opencart.managers.DataSubstituteManager;
-import com.opencart.managers.DriverManager;
-import com.opencart.managers.ScrollManager;
+import com.opencart.managers.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class GenericSteps {
     WebDriver driver = DriverManager.getInstance().getDriver();
+    private static final Logger logger = LogManager.getLogger(GenericSteps.class);
 
     @Then("The current url contains {string} keyword")
     public void theCurrentUrlContainsKeyword(String keyWordFromTheUrl) throws InterruptedException {
@@ -51,9 +52,10 @@ public class GenericSteps {
             Field classField = classInstance.getDeclaredField(elementName);
             classField.setAccessible(true);
             WebElement elementToBeClicked = (WebElement) classField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
+            ExplicitWaitManager.waitTillTheElementIsClickable(elementToBeClicked);
             ScrollManager.scrollToTheElement(elementToBeClicked);
             elementToBeClicked.click();
-            System.out.println(elementToBeClicked.getAccessibleName() + " is clicked");
+            logger.log(Level.INFO,elementToBeClicked.getAccessibleName() + " is clicked");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchFieldException | NoSuchMethodException e) {
             e.printStackTrace();
@@ -69,8 +71,9 @@ public class GenericSteps {
                 classField.setAccessible(true);
                 WebElement inputElement = (WebElement) classField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
                 fieldValue = DataSubstituteManager.substituteString(fieldValue);
+                ExplicitWaitManager.waitTillTheElementIsVisible(inputElement);
                 inputElement.sendKeys(fieldValue);
-                System.out.println("The [" + fieldName + "] is populated with [" + fieldValue+"]");
+                logger.log(Level.INFO,"The [" + fieldName + "] is populated with [" + fieldValue+"]");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
