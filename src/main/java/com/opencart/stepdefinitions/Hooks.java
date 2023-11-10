@@ -5,28 +5,33 @@ import io.cucumber.java.After;
 import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Hooks {
 
+    private static final Logger logger = LogManager.getLogger(Hooks.class);
+
     @BeforeAll
     public static void theMethodExecutedBeforeAllTests(){
-        System.out.println("The tests execution started.");
+        logger.log(Level.INFO,"The tests execution started.");
     }
 
     @Before
     public void beforeEachTest(){
-        System.out.println("A new test execution started.");
+        logger.log(Level.INFO,"A new test execution started.");
     }
 
     @After
     public void afterEachTest(){
         DriverManager.getInstance().deleteCookies();
-        System.out.println("A test execution ended.");
+        logger.log(Level.INFO,"A test execution ended.");
     }
 
     @AfterAll
     public static void theMethodExecutedAfterAllTests(){
         DriverManager.getInstance().quitTheDriver();
-        System.out.println("The tests execution ended.");
+        logger.log(Level.INFO,"The tests execution ended.");
     }
 }
