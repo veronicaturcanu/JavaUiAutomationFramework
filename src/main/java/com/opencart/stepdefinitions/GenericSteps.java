@@ -47,36 +47,34 @@ public class GenericSteps {
 
     @And("The {string} from {string} is clicked")
     public void theElementFromPageNameIsClicked(String elementName, String pageName) {
-        try {
-            Class classInstance = Class.forName("com.opencart.pageobjects." + pageName);
-            Field classField = classInstance.getDeclaredField(elementName);
-            classField.setAccessible(true);
-            WebElement elementToBeClicked = (WebElement) classField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
-            ExplicitWaitManager.waitTillTheElementIsClickable(elementToBeClicked);
-            ScrollManager.scrollToTheElement(elementToBeClicked);
-            elementToBeClicked.click();
-            logger.log(Level.INFO,elementToBeClicked.getAccessibleName() + " is clicked");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchFieldException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        WebElement elementToBeClicked = findWebElementFromPageObjectClass(elementName,pageName);
+        ExplicitWaitManager.waitTillTheElementIsClickable(elementToBeClicked);
+        ScrollManager.scrollToTheElement(elementToBeClicked);
+        elementToBeClicked.click();
+        logger.log(Level.INFO,elementToBeClicked.getAccessibleName() + " is clicked");
     }
 
     @When("The following form from {string} is populated as follow:")
     public void theFollowingFormFromIsPopulatedAsFollow(String pageName, Map<String, String> fieldAndValueMap) {
         fieldAndValueMap.forEach((fieldName, fieldValue) -> {
-            try {
-                Class classInstance = Class.forName("com.opencart.pageobjects." + pageName);
-                Field classField = classInstance.getDeclaredField(fieldName);
-                classField.setAccessible(true);
-                WebElement inputElement = (WebElement) classField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
-                fieldValue = DataSubstituteManager.substituteString(fieldValue);
-                ExplicitWaitManager.waitTillTheElementIsVisible(inputElement);
-                inputElement.sendKeys(fieldValue);
-                logger.log(Level.INFO,"The [" + fieldName + "] is populated with [" + fieldValue+"]");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            fieldValue = DataSubstituteManager.substituteString(fieldValue);
+            WebElement inputElement = findWebElementFromPageObjectClass(fieldName, pageName);
+            ExplicitWaitManager.waitTillTheElementIsVisible(inputElement);
+            logger.log(Level.INFO,"The [" + fieldName + "] is populated with [" + fieldValue+"]");
         });
+    }
+
+    private WebElement findWebElementFromPageObjectClass(String elementName, String pageName){
+        Class classInstance = null;
+        WebElement webElement = null;
+        try {
+            classInstance = Class.forName("com.opencart.pageobjects." + pageName);
+            Field classField = classInstance.getDeclaredField(elementName);
+            classField.setAccessible(true);
+            webElement = (WebElement) classField.get(classInstance.getConstructor(WebDriver.class).newInstance(driver));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return webElement;
     }
 }

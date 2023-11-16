@@ -1,3 +1,4 @@
+@runRegister
 Feature: Register flow Test Suite
 
   Background:

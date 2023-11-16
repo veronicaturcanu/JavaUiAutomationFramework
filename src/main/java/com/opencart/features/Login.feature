@@ -1,8 +1,10 @@
+
 Feature: Login flow Test Suite
+
 
   Background:
     Given "/index.php?route=account/login&language=en-gb" endpoint is accessed
-
+  @runLogin
   Scenario: Login Page can be accessed from Home Page
     Given "/" endpoint is accessed
     When Login icon is clicked from Header menu

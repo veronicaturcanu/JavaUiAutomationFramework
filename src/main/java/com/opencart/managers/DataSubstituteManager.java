@@ -1,5 +1,8 @@
 package com.opencart.managers;
 
+import com.opencart.context.CONTEXT;
+import com.opencart.context.ScenarioContext;
+
 public class DataSubstituteManager {
 
     public static String substituteString(String value) {
@@ -9,9 +12,13 @@ public class DataSubstituteManager {
                 case "RANDOMLASTNAME":
                     return FakeDataManager.getRandomLastName();
                 case "RANDOMEMAIL":
-                    return FakeDataManager.getRandomEmail();
+                    String email = FakeDataManager.getRandomEmail();
+                    ScenarioContext.getInstance().addToStorageContext(CONTEXT.EMAIL, email);
+                    return email;
                 case "RANDOMPASSWORD":
-                    return FakeDataManager.getRandomPassword(8, 12);
+                    String password = FakeDataManager.getRandomPassword(8, 12);
+                    ScenarioContext.getInstance().addToStorageContext(CONTEXT.PASSWORD,password);
+                    return password;
             }
         return value;
     }
